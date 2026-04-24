@@ -1,0 +1,19 @@
+{
+  "name": "yms-fiori",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "ui5 serve --open index.html",
+    "build": "ui5 build --all"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "@sap/ux-ui5-tooling": "^1.22.0",
+    "@ui5/cli": "^4.0.52",
+    "ui5-middleware-simpleproxy": "^3.7.0"
+  }
+}

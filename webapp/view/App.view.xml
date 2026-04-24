@@ -1,0 +1,11 @@
+<mvc:View
+  xmlns:mvc="sap.ui.core.mvc"
+  xmlns="sap.m"
+  displayBlock="true"
+  controllerName="com.yms.fiori.controller.App">
+
+  <Shell>
+    <App id="appNav" />
+  </Shell>
+
+</mvc:View>

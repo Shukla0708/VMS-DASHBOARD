@@ -1,0 +1,287 @@
+<mvc:View
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:layout="sap.ui.layout"
+    controllerName="com.yms.fiori.controller.ActionDetail"
+    displayBlock="true"
+>
+    <Page
+        title="{selectedAction>/actionText}"
+        showNavButton="true"
+        navButtonPress=".onNavBack"
+        class="sapUiContentPadding"
+    >
+        <headerContent>
+            <ObjectStatus
+                text="Completed"
+                state="Success"
+                icon="sap-icon://accept"
+            />
+        </headerContent>
+
+        <content>
+            <!-- ── Summary Header ── -->
+            <ObjectHeader
+                intro="{selectedAction>/actionCode}"
+                title="{selectedAction>/actionText}"
+                icon="{selectedAction>/icon}"
+            >
+                <attributes>
+                    <ObjectAttribute
+                        title="Timestamp"
+                        text="{selectedAction>/timestamp}"
+                    />
+                    <ObjectAttribute
+                        title="Location"
+                        text="{selectedAction>/location}"
+                    />
+                    <ObjectAttribute
+                        title="Performed By"
+                        text="{selectedAction>/performedBy}"
+                    />
+                </attributes>
+                <statuses>
+                    <ObjectStatus
+                        title="New Status"
+                        text="{selectedAction>/newStatus}"
+                        state="Success"
+                    />
+                    <ObjectStatus
+                        title="Previous Status"
+                        text="{selectedAction>/oldStatus}"
+                        state="None"
+                    />
+                </statuses>
+            </ObjectHeader>
+
+            <!-- ── Status Transition ── -->
+            <Panel
+                headerText="Status Transition"
+                expandable="false"
+                class="sapUiSmallMarginBottom"
+            >
+                <content>
+                    <layout:Grid
+                        defaultSpan="L6 M6 S12"
+                        class="sapUiSmallMargin"
+                    >
+                        <VBox>
+                            <Label
+                                design="Bold"
+                                text="Primary — Previous"
+                            />
+                            <ObjectStatus
+                                text="{selectedAction>/oldStatus}"
+                                state="None"
+                            />
+                        </VBox>
+                        <VBox>
+                            <Label
+                                design="Bold"
+                                text="Primary — New"
+                            />
+                            <ObjectStatus
+                                text="{selectedAction>/newStatus}"
+                                state="Success"
+                            />
+                        </VBox>
+                        <VBox>
+                            <Label
+                                design="Bold"
+                                text="Secondary — Previous"
+                            />
+                            <ObjectStatus
+                                text="{selectedAction>/oldSecStatus}"
+                                state="None"
+                            />
+                        </VBox>
+                        <VBox>
+                            <Label
+                                design="Bold"
+                                text="Secondary — New"
+                            />
+                            <ObjectStatus
+                                text="{selectedAction>/newSecStatus}"
+                                state="Information"
+                            />
+                        </VBox>
+                    </layout:Grid>
+                </content>
+            </Panel>
+
+            <!-- ── Action Details ── -->
+            <Panel
+                headerText="Action Details"
+                expandable="false"
+                class="sapUiSmallMarginBottom"
+            >
+                <content>
+                    <layout:Grid
+                        defaultSpan="L6 M6 S12"
+                        class="sapUiSmallMargin"
+                    >
+                    <VBox>
+                        <Label
+                            design="Bold"
+                            text="Action Code"
+                        />
+                        <Text text="{selectedAction>/actionCode}" />
+                      </VBox>
+                      <VBox>
+                        <Label
+                            design="Bold"
+                            text="Action Description"
+                        />
+                        <Text text="{selectedAction>/actionText}" />
+                      </VBox>   
+                      <VBox>
+                        <Label
+                            design="Bold"
+                            text="Document Type"
+                        />
+                        <Text text="{selectedAction>/docType}" />
+                      </VBox>
+                      <VBox>
+                        <Label
+                            design="Bold"
+                            text="Configuration No"
+                        />
+                        <Text text="{selectedAction>/configNo}" />
+                      </VBox>
+                      <VBox>
+                        <Label
+                            design="Bold"
+                            text="Timestamp"
+                        />
+                        <Text text="{selectedAction>/timestamp}" />
+                      </VBox>   
+                      <VBox>
+                        <Label
+                            design="Bold"
+                            text="Location"
+                        />
+                        <Text text="{selectedAction>/location}" />
+                      </VBox>
+                      <VBox>           
+                        <Label
+                            design="Bold"
+                            text="Customer"
+                        />
+                        <Text text="{selectedAction>/customer}" />
+                      </VBox>
+                      <VBox>
+                        <Label
+                            design="Bold"
+                            text="Performed By"
+                        />
+                        <Text text="{selectedAction>/performedBy}" />
+                      </VBox>
+                      <VBox>
+                        <Label
+                            design="Bold"
+                            text="Logical System"
+                        />
+                        <Text text="{selectedAction>/logicalSystem}" />
+                      </VBox>               
+                    </layout:Grid>
+                </content>
+            </Panel>
+
+            <!-- ── Vehicle Context ── -->
+            <Panel
+                headerText="Vehicle"
+                expandable="true"
+                expanded="false"
+                class="sapUiSmallMarginBottom"
+            >
+                <content>
+                    <layout:Grid
+                        defaultSpan="L6 M6 S12"
+                        class="sapUiSmallMargin"
+                    >
+                          <VBox>
+                        <Label
+                            design="Bold"
+                            text="Unit No"
+                        />
+                        <Text text="{selectedVehicle>/VMSVehicleExternalID}" />
+                      </VBox>
+                      <VBox>
+                        <Label
+                            design="Bold"
+                            text="Internal ID"
+                        />
+                        <Text text="{selectedVehicle>/VMSVehicleInternalID}" />
+                      </VBox>
+                      <VBox>
+                        <Label
+                            design="Bold"
+                            text="Material"
+                        />
+                        <Text text="{selectedVehicle>/Material}" />
+                      </VBox>
+                      <VBox>
+                        <Label
+                            design="Bold"
+                            text="Equipment"
+                        />
+                        <Text text="{selectedVehicle>/Equipment}" />
+                      </VBox>
+                      <VBox>
+                        <Label
+                            design="Bold"
+                            text="Plant"
+                        />
+                        <Text text="{selectedVehicle>/PlantName}" />
+                      </VBox>
+                      <VBox>
+                        <Label
+                            design="Bold"
+                            text="Configuration No"
+                        />
+                        <Text text="{selectedVehicle>/ConfigurationNumber}" />
+                      </VBox>
+                      <VBox>
+                        <Label
+                            design="Bold"
+                            text="Primary Status"
+                        />
+                        <ObjectStatus
+                            text="{selectedVehicle>/VMSVehiclePrimaryStatus_Text}"
+                            state="Success"
+                        />
+                      </VBox> 
+                      <VBox>
+                        <Label
+                            design="Bold"
+                            text="Secondary Status"
+                        />
+                        <ObjectStatus
+                            text="{selectedVehicle>/VMSVehicleSecondaryStatus_Text}"
+                            state="Information"
+                        />
+                      </VBox>
+                      <VBox>
+                        <Label
+                            design="Bold"
+                            text="Current Location"
+                        />
+                        <Text
+                            text="{selectedVehicle>/VMSVehicleLocation_Text}"
+                        />
+                      </VBox>
+                      <VBox>        
+                        <Label
+                            design="Bold"
+                            text="Availability"
+                        />
+                        <Text
+                            text="{selectedVehicle>/VMSVehicleAvailabilityStatus_Text}"
+                        />
+                      </VBox>      
+                    </layout:Grid>
+                </content>
+            </Panel>
+        </content>
+    </Page>
+</mvc:View>

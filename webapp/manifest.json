@@ -1,0 +1,146 @@
+{
+  "_version": "1.58.0",
+  "sap.app": {
+    "id": "com.yms.fiori",
+    "type": "application",
+    "title": "YMS Fiori — Yard Management",
+    "description": "Manifest & Vehicle Tracking Application",
+    "applicationVersion": {
+      "version": "1.0.0"
+    },
+    "dataSources": {
+      "mainService": {
+        "uri": "/sap/opu/odata4/sap/zvm_manifest_srv/srvd_a2x/sap/zvm_service_def/0001/",
+        "type": "OData",
+        "settings": {
+          "odataVersion": "4.0"
+        }
+      },
+      "vehicleService": {
+        "uri": "/sap/opu/odata/sap/API_VMSVEHICLE/",
+        "type": "OData",
+        "settings": {
+          "odataVersion": "2.0"
+        }
+      }
+    }
+  },
+  "sap.ui": {
+    "technology": "UI5",
+    "icons": {
+      "icon": "sap-icon://shipping-status"
+    },
+    "deviceTypes": {
+      "desktop": true,
+      "tablet": true,
+      "phone": true
+    }
+  },
+  "sap.ui5": {
+    "rootView": {
+      "viewName": "com.yms.fiori.view.App",
+      "type": "XML",
+      "async": true,
+      "id": "app"
+    },
+    "dependencies": {
+      "minUI5Version": "1.120.0",
+      "libs": {
+        "sap.m": {},
+        "sap.ui.core": {},
+        "sap.f": {},
+        "sap.ui.layout": {}
+      }
+    },
+    "contentDensities": {
+      "compact": true,
+      "cozy": true
+    },
+    "resources": {
+      "css": [
+        {
+          "uri": "css/style.css"
+        }
+      ]
+    },
+    "models": {
+      "i18n": {
+        "type": "sap.ui.model.resource.ResourceModel",
+        "settings": {
+          "bundleName": "com.yms.fiori.i18n.i18n",
+          "supportedLocales": [
+            ""
+          ],
+          "fallbackLocale": ""
+        }
+      },
+      "": {
+        "dataSource": "mainService",
+        "preload": true,
+        "settings": {
+          "synchronizationMode": "None",
+          "operationMode": "Server"
+        }
+      },
+      "vehicleModel": {
+        "dataSource": "vehicleService",
+        "preload": false,
+        "type": "sap.ui.model.odata.v2.ODataModel",
+        "settings": {
+          "useBatch": false,
+          "defaultBindingMode": "OneWay"
+        }
+      }
+    },
+    "routing": {
+      "config": {
+        "routerClass": "sap.m.routing.Router",
+        "viewType": "XML",
+        "viewPath": "com.yms.fiori.view",
+        "controlId": "appNav",
+        "controlAggregation": "pages",
+        "async": true
+      },
+      "routes": [
+        {
+          "name": "ManifestList",
+          "pattern": "",
+          "target": "ManifestList"
+        },
+        {
+          "name": "VehicleList",
+          "pattern": "manifest/{manifestNo}",
+          "target": "VehicleList"
+        },
+        {
+          "name": "VehicleJourney",
+          "pattern": "manifest/{manifestNo}/vehicle/{vguid}",
+          "target": "VehicleJourney"
+        },
+        {
+          "name": "ActionDetail",
+          "pattern": "manifest/{manifestNo}/vehicle/{vguid}/action/{actionId}",
+          "target": "ActionDetail"
+        }
+      ],
+      "targets": {
+        "ManifestList": {
+          "viewName": "ManifestList",
+          "viewLevel": 1
+        },
+        "VehicleList": {
+          "viewName": "VehicleList",
+          "viewLevel": 2
+        },
+        "VehicleJourney": {
+          "viewName": "VehicleJourney",
+          "viewLevel": 3
+        },
+        "ActionDetail": {
+          "viewName": "ActionDetail",
+          "viewLevel": 4
+        }
+      }
+    }
+  }
+}

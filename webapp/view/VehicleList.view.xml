@@ -1,0 +1,111 @@
+<mvc:View
+  xmlns:mvc="sap.ui.core.mvc"
+  xmlns="sap.m"
+  xmlns:core="sap.ui.core"
+  controllerName="com.yms.fiori.controller.VehicleList"
+  displayBlock="true">
+
+  <Page
+    id="vehicleListPage"
+    title="{viewModel>/pageTitle}"
+    showNavButton="true"
+    navButtonPress=".onNavBack"
+    class="sapUiContentPadding">
+
+    <content>
+
+      <!-- ── KPI Strip ── -->
+      <HBox
+        id="kpiStrip"
+        justifyContent="SpaceBetween"
+        class="sapUiSmallMarginBottom"
+        wrap="Wrap">
+
+        <GenericTile
+          id="tileTotal"
+          header="Total Vehicles"
+          subheader=""
+          class="sapUiTinyMargin"
+          tileContent="">
+          <tileContent>
+            <TileContent unit="">
+              <content>
+                <NumericContent
+                  id="numTotal"
+                  value="0"
+                  scale=""
+                  valueColor="None" />
+              </content>
+            </TileContent>
+          </tileContent>
+        </GenericTile>
+
+      </HBox>
+
+      <!-- ── Vehicle Table ── -->
+      <Table
+        id="vehicleTable"
+        items="{viewModel>/vehicles}"
+        mode="None"
+        growing="true"
+        growingThreshold="20"
+        noDataText="No vehicles for this manifest">
+
+        <headerToolbar>
+          <OverflowToolbar>
+            <Title text="Vehicles" level="H3" />
+            <ToolbarSpacer />
+            <Text id="vehicleCountText" text="" />
+          </OverflowToolbar>
+        </headerToolbar>
+
+        <columns>
+          <Column width="10rem">
+            <Text text="Unit No" />
+          </Column>
+          <Column width="8rem">
+            <Text text="Created Date" />
+          </Column>
+          <Column width="7rem">
+            <Text text="Created Time" />
+          </Column>
+          <Column width="10rem">
+            <Text text="Vehicle GUID" />
+          </Column>
+          <Column width="4rem" hAlign="Center">
+            <Text text="" />
+          </Column>
+        </columns>
+
+        <items>
+          <ColumnListItem
+            type="Navigation"
+            press=".onVehiclePress">
+            <cells>
+              <ObjectIdentifier
+                title="{viewModel>zzunit_no}"
+                titleActive="false" />
+              <Text text="{
+                path: 'viewModel>credat',
+                formatter: '.formatter.formatDate'
+              }" />
+              <Text text="{
+                path: 'viewModel>cretim',
+                formatter: '.formatter.formatTime'
+              }" />
+              <Text
+                text="{viewModel>vguid}"
+                wrapping="false"
+                class="sapUiSmallFont" />
+              <Button
+                icon="sap-icon://arrow-right"
+                type="Transparent" />
+            </cells>
+          </ColumnListItem>
+        </items>
+
+      </Table>
+    </content>
+
+  </Page>
+</mvc:View>

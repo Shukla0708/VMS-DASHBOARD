@@ -1,0 +1,165 @@
+<mvc:View
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    xmlns:layout="sap.ui.layout"
+    xmlns:f="sap.ui.layout.form"
+    controllerName="com.yms.fiori.controller.VehicleJourney"
+    displayBlock="true"
+>
+    <Page
+        id="vehicleJourneyPage"
+        title="{journeyModel>/pageTitle}"
+        showNavButton="true"
+        navButtonPress=".onNavBack"
+        class="sapUiContentPadding"
+    >
+        <content>
+            <!-- ── Journey Progress Card ── -->
+            <Panel
+                id="progressPanel"
+                headerText="Journey Progress"
+                expandable="false"
+                class="sapUiSmallMarginBottom"
+            >
+                <content>
+                    <VBox class="sapUiMediumMargin">
+                        <!-- Step count label -->
+                        <HBox
+                            alignItems="Center"
+                            class="sapUiSmallMarginBottom"
+                        >
+                            <Title
+                                text="{journeyModel>/progressLabel}"
+                                level="H4"
+                            />
+                        </HBox>
+
+                        <!-- Progress bar — full width, bigger -->
+                        <ProgressIndicator
+                            id="overallProgress"
+                            percentValue="{journeyModel>/progressPct}"
+                            displayValue="{journeyModel>/progressPct}%"
+                            width="100%"
+                            height="2rem"
+                            state="{journeyModel>/progressState}"
+                            showValue="true"
+                            class="sapUiSmallMarginBottom"
+                        />
+
+                        <!-- Step chips -->
+                        <HBox
+                            id="stepChipsBox"
+                            wrap="Wrap"
+                            class="sapUiSmallMarginTop"
+                        />
+                    </VBox>
+                </content>
+            </Panel>
+
+            <!-- ── Vehicle Info Strip ── -->
+            <Panel
+                headerText="Vehicle Information"
+                expandable="true"
+                expanded="false"
+                class="sapUiSmallMarginBottom"
+            >
+                <layout:Grid defaultSpan="L6 M6 S12">
+                    <VBox>
+                        <Label text="Unit No" />
+                        <Text text="{selectedVehicle>/zzunit_no}" />
+                    </VBox>
+
+                    <VBox>
+                        <Label text="Vehicle GUID" />
+                        <Text text="{selectedVehicle>/vguid}" />
+                    </VBox>
+
+                    <VBox>
+                        <Label text="Created Date" />
+                        <Text
+                            text="{path: 'selectedVehicle>/credat', formatter: '.formatter.formatDate'}"
+                        />
+                    </VBox>
+                </layout:Grid>
+            </Panel>
+
+            <!-- ── Completed Actions List ── -->
+            <Panel
+                headerText="Action Log"
+                expandable="false"
+            >
+                <content>
+                    <List
+                        id="actionList"
+                        items="{journeyModel>/actions}"
+                        mode="None"
+                        noDataText="No actions recorded yet"
+                        busyIndicatorDelay="0"
+                    >
+                        <items>
+                            <CustomListItem
+                                type="Navigation"
+                                press=".onActionPress"
+                            >
+                                <HBox
+                                    alignItems="Center"
+                                    justifyContent="SpaceBetween"
+                                    class="sapUiSmallMarginBeginEnd sapUiTinyMarginTopBottom"
+                                >
+                                    <!-- Left: icon + action info -->
+                                    <HBox alignItems="Center">
+                                        <core:Icon
+                                            src="{journeyModel>icon}"
+                                            size="1.8rem"
+                                            color="#0070f2"
+                                            class="sapUiMediumMarginEnd"
+                                        />
+                                        <VBox>
+                                            <Title
+                                                text="{journeyModel>actionText}"
+                                                level="H5"
+                                            />
+                                            <HBox class="sapUiTinyMarginTop">
+                                                <core:Icon
+                                                    src="sap-icon://time-entry-request"
+                                                    size="0.75rem"
+                                                    color="#6a6d70"
+                                                    class="sapUiTinyMarginEnd"
+                                                />
+                                                <Text
+                                                    text="{journeyModel>timestamp}"
+                                                    class="sapUiSmallFont"
+                                                />
+                                            </HBox>
+                                            <Text
+                                                text="{journeyModel>location}"
+                                                class="sapUiSmallFont"
+                                            />
+                                            <Text
+                                                text="{
+                                                        parts: [
+                                                          {path: 'journeyModel>oldStatus'},
+                                                          {path: 'journeyModel>newStatus'}
+                                                        ],
+                                                        formatter: '.formatter.formatStatusTransition'
+                                                      }"
+                                                class="sapUiSmallFont"
+                                            />
+                                        </VBox>
+                                    </HBox>
+
+                                    <!-- Right: status -->
+                                    <ObjectStatus
+                                        text="{journeyModel>statusText}"
+                                        state="{journeyModel>statusState}"
+                                    />
+                                </HBox>
+                            </CustomListItem>
+                        </items>
+                    </List>
+                </content>
+            </Panel>
+        </content>
+    </Page>
+</mvc:View>

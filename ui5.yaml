@@ -1,0 +1,29 @@
+specVersion: "3.0"
+metadata:
+  name: com.yms.fiori
+type: application
+framework:
+  name: SAPUI5
+  version: "1.120.0"
+  libraries:
+    - name: sap.m
+    - name: sap.f
+    - name: sap.ui.core
+    - name: sap.ui.layout
+server:
+  customMiddleware:
+    - name: fiori-tools-proxy
+      afterMiddleware: compression
+      configuration:
+        ignoreCertError: true
+        backend:
+          - path: /sap
+            url: https://vhymhedwwd01.sap.ymc-yns.com:44380
+            client: "610"
+            # ADD THIS LINE to bypass the redirect to login pages
+            saml: false
+            #credentials:
+            #  // username: "YMSL_0097"
+            #  password: "YourActualPasswordHere"   
+        # Add these lines:
+             
