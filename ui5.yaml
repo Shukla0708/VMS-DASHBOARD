@@ -22,8 +22,8 @@ server:
             client: "610"
             # ADD THIS LINE to bypass the redirect to login pages
             saml: false
-            #credentials:
-            #  // username: "YMSL_0097"
-            #  password: "YourActualPasswordHere"   
+            credentials:
+              username: "YMSL_0097"
+              password: "Sneh@1234567890123"   
         # Add these lines:
              

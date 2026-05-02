@@ -20,7 +20,8 @@ sap.ui.define([
         pageTitle: "Vehicles",
         manifestNo: "",
         vehicles: [],
-        totalCount: 0
+        totalCount: 0,
+        noOfUnit: 0
       });
       this.getView().setModel(oViewModel, "viewModel");
 
@@ -33,11 +34,12 @@ sap.ui.define([
     // ─── Route matched ────────────────────────────────────────────
     _onRouteMatched: function (oEvent) {
       var sManifestNo = decodeURIComponent(oEvent.getParameter("arguments").manifestNo);
+      var sNoOfUnit = decodeURIComponent(oEvent.getParameter("arguments").noOfUnit);
       var oViewModel = this.getView().getModel("viewModel");
 
       oViewModel.setProperty("/manifestNo", sManifestNo);
       oViewModel.setProperty("/pageTitle", "Vehicles — " + sManifestNo);
-
+      oViewModel.setProperty("/noOfUnit", sNoOfUnit);
       this._loadVehicles(sManifestNo);
     },
 
@@ -64,6 +66,7 @@ sap.ui.define([
 
         oViewModel.setProperty("/vehicles", aVehicles);
         oViewModel.setProperty("/totalCount", aVehicles.length);
+      
         this.byId("vehicleCountText").setText(aVehicles.length + " vehicle(s)");
         oTable.setBusy(false);
 

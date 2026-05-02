@@ -3,7 +3,7 @@
   "sap.app": {
     "id": "com.yms.fiori",
     "type": "application",
-    "title": "YMS Fiori — Yard Management",
+    "title": "VMS Dashboard",
     "description": "Manifest & Vehicle Tracking Application",
     "applicationVersion": {
       "version": "1.0.0"
@@ -109,7 +109,7 @@
         },
         {
           "name": "VehicleList",
-          "pattern": "manifest/{manifestNo}",
+          "pattern": "manifest/{manifestNo}/{noOfUnit}",
           "target": "VehicleList"
         },
         {

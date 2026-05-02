@@ -43,8 +43,10 @@ sap.ui.define([
       if (!oCtx) return;
 
       var sManifestNo = oCtx.getProperty("zzmanifest_no");
+      var sNoOfUnit = oCtx.getProperty("NoOfVehicles");
       this._oRouter.navTo("VehicleList", {
-        manifestNo: encodeURIComponent(sManifestNo)
+        manifestNo: encodeURIComponent(sManifestNo),
+        noOfUnit: encodeURIComponent(sNoOfUnit)
       });
     },
 
