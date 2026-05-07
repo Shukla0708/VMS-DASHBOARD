@@ -113,25 +113,26 @@
                             />
                             <Text
                                 text="{
-                path: 'viewModel>credat',
-                formatter: '.formatter.formatDate'
-              }"
+                                        path: 'viewModel>credat',
+                                        formatter: '.formatter.formatDate'
+                                    }"
                             />
                             <Text
                                 text="{
-                path: 'viewModel>cretim',
-                formatter: '.formatter.formatTime'
-              }"
+                                        path: 'viewModel>cretim'
+
+                                    }"
                             />
                             <Text
                                 text="{viewModel>vguid}"
                                 wrapping="false"
                                 class="sapUiSmallFont"
                             />
-                            <Button
+                            <!-- <Button
                                 icon="sap-icon://arrow-right"
                                 type="Transparent"
-                            />
+                                press=".onVehiclePress"
+                            /> -->
                         </cells>
                     </ColumnListItem>
                 </items>

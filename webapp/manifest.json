@@ -37,6 +37,7 @@
     }
   },
   "sap.ui5": {
+    "flexEnabled": false,
     "rootView": {
       "viewName": "com.yms.fiori.view.App",
       "type": "XML",
