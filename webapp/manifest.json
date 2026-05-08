@@ -16,11 +16,18 @@
           "odataVersion": "4.0"
         }
       },
-      "vehicleService": {
+      "vehicleService1": {
         "uri": "/sap/opu/odata/sap/API_VMSVEHICLE/",
         "type": "OData",
         "settings": {
           "odataVersion": "2.0"
+        }
+      },
+      "vehicleService": {
+        "uri": "/sap/opu/odata4/sap/zebm_vmsvehicle_api/srvd_a2x/sap/zebm_c_vmsvehicle_srv/0001/",
+        "type": "OData",
+        "settings": {
+          "odataVersion": "4.0"
         }
       }
     }
@@ -37,7 +44,6 @@
     }
   },
   "sap.ui5": {
-    "flexEnabled": false,
     "rootView": {
       "viewName": "com.yms.fiori.view.App",
       "type": "XML",
@@ -83,13 +89,21 @@
           "operationMode": "Server"
         }
       },
-      "vehicleModel": {
-        "dataSource": "vehicleService",
+      "vehicleModel1": {
+        "dataSource": "vehicleService1",
         "preload": false,
         "type": "sap.ui.model.odata.v2.ODataModel",
         "settings": {
           "useBatch": false,
           "defaultBindingMode": "OneWay"
+        }
+      },
+      "vehicleModel": {
+        "dataSource": "vehicleService",
+        "preload": false,
+        "settings": {
+          "synchronizationMode": "None",
+          "operationMode": "Server"
         }
       }
     },

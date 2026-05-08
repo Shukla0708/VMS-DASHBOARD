@@ -15,16 +15,16 @@ sap.ui.define([
 
   // ── Real VMS action steps in order from your API data ─────────
   var JOURNEY_STEPS = [
-    { key: "ZCRE",  label: "Create Unit"            },
-    { key: "ZVIN",  label: "Assign VIN"             },
-    { key: "ZCEQ",  label: "Equipment Assign"       },
-    { key: "ZSOR",  label: "Sales Order"            },
-    { key: "ZIPO",  label: "IC PO Assign"           },
-    { key: "ZIID",  label: "IC Inbound Delivery"    },
-    { key: "ZIGR",  label: "IC Goods Receipt"       },
-    { key: "ZODE",  label: "Outbound Delivery"      },
-    { key: "ZGOI",  label: "Goods Issue"            },
-    { key: "ZIIN",  label: "IC Inbound Invoice"     }
+    { key: "ZCRE", label: "Create Unit" },
+    { key: "ZVIN", label: "Assign VIN" },
+    { key: "ZCEQ", label: "Equipment Assign" },
+    { key: "ZSOR", label: "Sales Order" },
+    { key: "ZIPO", label: "IC PO Assign" },
+    { key: "ZIID", label: "IC Inbound Delivery" },
+    { key: "ZIGR", label: "IC Goods Receipt" },
+    { key: "ZODE", label: "Outbound Delivery" },
+    { key: "ZGOI", label: "Goods Issue" },
+    { key: "ZIIN", label: "IC Inbound Invoice" }
   ];
 
   return Controller.extend("com.yms.fiori.controller.VehicleJourney", {
@@ -35,11 +35,11 @@ sap.ui.define([
       this._oRouter = this.getOwnerComponent().getRouter();
 
       this.getView().setModel(new JSONModel({
-        pageTitle:     "Vehicle Journey",
-        progressPct:   0,
+        pageTitle: "Vehicle Journey",
+        progressPct: 0,
         progressLabel: "0 of 0 steps",
         progressState: "None",
-        actions:       []
+        actions: []
       }), "journeyModel");
 
       this._oRouter
@@ -48,9 +48,9 @@ sap.ui.define([
     },
 
     _onRouteMatched: function (oEvent) {
-      var sVguid       = decodeURIComponent(oEvent.getParameter("arguments").vguid);
+      var sVguid = decodeURIComponent(oEvent.getParameter("arguments").vguid);
       var oVehicleData = this.getOwnerComponent().getModel("selectedVehicle")
-                          ? this.getOwnerComponent().getModel("selectedVehicle").getData() : {};
+        ? this.getOwnerComponent().getModel("selectedVehicle").getData() : {};
 
       this.getView().getModel("journeyModel").setProperty(
         "/pageTitle", "Journey — " + (oVehicleData.zzunit_no || sVguid)
@@ -58,50 +58,102 @@ sap.ui.define([
       this._loadVehicleActivities(sVguid);
     },
 
-    // ─── OData V2 call ────────────────────────────────────────────
+    // // ─── OData V2 call ────────────────────────────────────────────
+    // _loadVehicleActivities: function (sVguid) {
+    //   var oView         = this.getView();
+    //   var oVehicleModel = this.getOwnerComponent().getModel("vehicleModel");
+
+    //   oView.setBusy(true);
+
+    //   oVehicleModel.read("/A_VMSVehicle(guid'" + sVguid + "')", {
+    //     urlParameters: { "$expand": "to_VMSVehicleHistory" },
+    //     success: function (oData) {
+    //       oView.setBusy(false);
+
+    //       // Merge vehicle header into selectedVehicle model
+    //       var oSelModel = this.getOwnerComponent().getModel("selectedVehicle");
+    //       if (!oSelModel) {
+    //         oSelModel = new JSONModel();
+    //         this.getOwnerComponent().setModel(oSelModel, "selectedVehicle");
+    //       }
+    //       oSelModel.setData(Object.assign({}, oSelModel.getData() || {}, {
+    //         VMSVehicleExternalID:              oData.VMSVehicleExternalID,
+    //         VMSVehicleInternalID:              oData.VMSVehicleInternalID,
+    //         Material:                          oData.Material,
+    //         Equipment:                         oData.Equipment,
+    //         Plant:                             oData.Plant,
+    //         PlantName:                         oData.PlantName,
+    //         VMSVehiclePrimaryStatus_Text:      oData.VMSVehiclePrimaryStatus_Text,
+    //         VMSVehicleSecondaryStatus_Text:    oData.VMSVehicleSecondaryStatus_Text,
+    //         VMSVehicleLocation_Text:           oData.VMSVehicleLocation_Text,
+    //         VMSVehicleAvailabilityStatus_Text: oData.VMSVehicleAvailabilityStatus_Text,
+    //         ConfigurationNumber:               oData.ConfigurationNumber
+    //       }));
+
+    //       var aHistory = (oData.to_VMSVehicleHistory && oData.to_VMSVehicleHistory.results)
+    //                     ? oData.to_VMSVehicleHistory.results : [];
+
+    //       this._processActivities(aHistory);
+    //     }.bind(this),
+
+    //     error: function (oErr) {
+    //       oView.setBusy(false);
+    //       MessageBox.warning("Could not load vehicle history.\n" + (oErr.message || ""));
+    //       this._processActivities([]);
+    //     }.bind(this)
+    //   });
+    // },
+
+    // ─── OData V4 call ────────────────────────────────────────────
     _loadVehicleActivities: function (sVguid) {
-      var oView         = this.getView();
+      var oView = this.getView();
       var oVehicleModel = this.getOwnerComponent().getModel("vehicleModel");
 
       oView.setBusy(true);
 
-      oVehicleModel.read("/A_VMSVehicle(guid'" + sVguid + "')", {
-        urlParameters: { "$expand": "to_VMSVehicleHistory" },
-        success: function (oData) {
-          oView.setBusy(false);
+      // Build the entity path — V4 uses (guid) directly, no guid'...' wrapper
+      var sPath = "/ZEBM_C_VMSVEHICLE(" + sVguid + ")";
 
-          // Merge vehicle header into selectedVehicle model
-          var oSelModel = this.getOwnerComponent().getModel("selectedVehicle");
-          if (!oSelModel) {
-            oSelModel = new JSONModel();
-            this.getOwnerComponent().setModel(oSelModel, "selectedVehicle");
-          }
-          oSelModel.setData(Object.assign({}, oSelModel.getData() || {}, {
-            VMSVehicleExternalID:              oData.VMSVehicleExternalID,
-            VMSVehicleInternalID:              oData.VMSVehicleInternalID,
-            Material:                          oData.Material,
-            Equipment:                         oData.Equipment,
-            Plant:                             oData.Plant,
-            PlantName:                         oData.PlantName,
-            VMSVehiclePrimaryStatus_Text:      oData.VMSVehiclePrimaryStatus_Text,
-            VMSVehicleSecondaryStatus_Text:    oData.VMSVehicleSecondaryStatus_Text,
-            VMSVehicleLocation_Text:           oData.VMSVehicleLocation_Text,
-            VMSVehicleAvailabilityStatus_Text: oData.VMSVehicleAvailabilityStatus_Text,
-            ConfigurationNumber:               oData.ConfigurationNumber
-          }));
-
-          var aHistory = (oData.to_VMSVehicleHistory && oData.to_VMSVehicleHistory.results)
-                        ? oData.to_VMSVehicleHistory.results : [];
-
-          this._processActivities(aHistory);
-        }.bind(this),
-
-        error: function (oErr) {
-          oView.setBusy(false);
-          MessageBox.warning("Could not load vehicle history.\n" + (oErr.message || ""));
-          this._processActivities([]);
-        }.bind(this)
+      // Create a context binding for this single entity
+      var oContextBinding = oVehicleModel.bindContext(sPath, null, {
+        $expand: "_VMSVehicleHistory"
       });
+
+      oContextBinding.requestObject().then(function (oData) {
+        oView.setBusy(false);
+
+        // Merge vehicle header into selectedVehicle model
+        var oSelModel = this.getOwnerComponent().getModel("selectedVehicle");
+        if (!oSelModel) {
+          oSelModel = new JSONModel();
+          this.getOwnerComponent().setModel(oSelModel, "selectedVehicle");
+        }
+
+        oSelModel.setData(Object.assign({}, oSelModel.getData() || {}, {
+          VMSVehicleExternalID: oData.VMSVehicleExternalID,
+          VMSVehicleInternalID: oData.VMSVehicleInternalID,
+          Material: oData.Material,
+          Equipment: oData.Equipment,
+          Plant: oData.Plant,
+          PlantName: oData.PlantName,
+          VMSVehiclePrimaryStatus_Text: oData.VMSVehiclePrimaryStatus_Text,
+          VMSVehicleSecondaryStatus_Text: oData.VMSVehicleSecondaryStatus_Text,
+          VMSVehicleLocation_Text: oData.VMSVehicleLocation_Text,
+          VMSVehicleAvailabilityStatus_Text: oData.VMSVehicleAvailabilityStatus_Text,
+          ConfigurationNumber: oData.ConfigurationNumber
+        }));
+
+        // V4: expanded data is a plain array — no .results wrapper
+        var aHistory = Array.isArray(oData._VMSVehicleHistory)
+          ? oData._VMSVehicleHistory : [];
+
+        this._processActivities(aHistory);
+
+      }.bind(this)).catch(function (oErr) {
+        oView.setBusy(false);
+        MessageBox.warning("Could not load vehicle history.\n" + (oErr.message || ""));
+        this._processActivities([]);
+      }.bind(this));
     },
 
     // ─── Transform history records → view model ───────────────────
@@ -120,35 +172,35 @@ sap.ui.define([
       // Build display list — every history entry shows as one row
       var aActions = aRaw.map(function (o) {
         return {
-          actionCode:   o.VMSVehicleAction,
-          actionText:   o.VMSVehicleAction_Text             || o.VMSVehicleAction,
-          timestamp:    formatter.formatODataDateTime(o.VMSVehicleActionDateTime),
-          location:     o.VMSVehicleLocation_Text           || o.VMSVehicleLocation || "—",
-          performedBy:  o.CreatedByUserName                 || "—",
-          oldStatus:    o.VMSVehicleOldPrimaryStatus_Text   || "—",
-          newStatus:    o.VMSVehicleNewPrimaryStatus_Text   || "—",
+          actionCode: o.VMSVehicleAction,
+          actionText: o.VMSVehicleAction_Text || o.VMSVehicleAction,
+          timestamp: formatter.formatODataDateTime(o.VMSVehicleActionDateTime),
+          location: o.VMSVehicleLocation_Text || o.VMSVehicleLocation || "—",
+          performedBy: o.CreatedByUserName || "—",
+          oldStatus: o.VMSVehicleOldPrimaryStatus_Text || "—",
+          newStatus: o.VMSVehicleNewPrimaryStatus_Text || "—",
           oldSecStatus: o.VMSVehicleOldSecondaryStatus_Text || "—",
           newSecStatus: o.VMSVehicleNewSecondaryStatus_Text || "—",
-          docType:      o.VMSVehicleActionDocType           || "—",
-          configNo:     o.ConfigurationNumber               || "—",
-          customer:     o.VMSVehicleCustomer                || "—",
-          logicalSystem:o.LogicalSystem                     || "—",
-          statusText:   "Completed",
-          statusState:  "Success",
-          icon:         this._iconForCode(o.VMSVehicleAction),
-          iconBg:       "#f1fdf6",
-          _raw:         o
+          docType: o.VMSVehicleActionDocType || "—",
+          configNo: o.ConfigurationNumber || "—",
+          customer: o.VMSVehicleCustomer || "—",
+          logicalSystem: o.LogicalSystem || "—",
+          statusText: "Completed",
+          statusState: "Success",
+          icon: this._iconForCode(o.VMSVehicleAction),
+          iconBg: "#f1fdf6",
+          _raw: o
         };
       }.bind(this));
 
       oJourneyModel.setProperty("/actions", aActions);
 
       // ── Progress ──────────────────────────────────────────────
-      var iDone  = JOURNEY_STEPS.filter(function (s) { return !!oPerformedMap[s.key]; }).length;
+      var iDone = JOURNEY_STEPS.filter(function (s) { return !!oPerformedMap[s.key]; }).length;
       var iTotal = JOURNEY_STEPS.length;
-      var iPct   = iTotal > 0 ? Math.round((iDone / iTotal) * 100) : 0;
+      var iPct = iTotal > 0 ? Math.round((iDone / iTotal) * 100) : 0;
 
-      oJourneyModel.setProperty("/progressPct",   iPct);
+      oJourneyModel.setProperty("/progressPct", iPct);
       oJourneyModel.setProperty("/progressLabel", iDone + " of " + iTotal + " steps completed (" + iPct + "%)");
       oJourneyModel.setProperty("/progressState", iPct === 100 ? "Success" : "None");
 
@@ -163,16 +215,16 @@ sap.ui.define([
 
       JOURNEY_STEPS.forEach(function (oStep) {
         var oRecord = oPerformedMap[oStep.key];
-        var bDone   = !!oRecord;
+        var bDone = !!oRecord;
 
         var oChip = new HBox({ alignItems: "Center" })
           .addStyleClass("sapUiTinyMarginEnd sapUiTinyMarginBottom")
           .addStyleClass(bDone ? "ymsDoneChip" : "ymsPendingChip");
 
         var oIcon = new CoreIcon({
-          src:   bDone ? "sap-icon://accept" : "sap-icon://circle-task",
-          color: bDone ? "#107e3e"           : "#8c8c8c",
-          size:  "0.85rem"
+          src: bDone ? "sap-icon://accept" : "sap-icon://circle-task",
+          color: bDone ? "#107e3e" : "#8c8c8c",
+          size: "0.85rem"
         }).addStyleClass("sapUiTinyMarginEnd");
 
         var oInner = new VBox();
@@ -215,9 +267,9 @@ sap.ui.define([
 
     // ─── Action row press → ActionDetail ─────────────────────────
     onActionPress: function (oEvent) {
-      var oCtx    = oEvent.getSource().getBindingContext("journeyModel");
+      var oCtx = oEvent.getSource().getBindingContext("journeyModel");
       var oAction = oCtx.getObject();
-      var iIdx    = oCtx.getPath().split("/").pop();
+      var iIdx = oCtx.getPath().split("/").pop();
 
       var oActionModel = this.getOwnerComponent().getModel("selectedAction");
       if (!oActionModel) {
@@ -226,15 +278,15 @@ sap.ui.define([
       }
       oActionModel.setData(oAction);
 
-      var sHash       = window.location.hash.replace("#", "");
-      var aParts      = sHash.split("/");
+      var sHash = window.location.hash.replace("#", "");
+      var aParts = sHash.split("/");
       var sManifestNo = aParts[1] ? decodeURIComponent(aParts[1]) : "X";
-      var sVguid      = aParts[3] ? decodeURIComponent(aParts[3]) : "X";
+      var sVguid = aParts[3] ? decodeURIComponent(aParts[3]) : "X";
 
       this._oRouter.navTo("ActionDetail", {
         manifestNo: encodeURIComponent(sManifestNo),
-        vguid:      encodeURIComponent(sVguid),
-        actionId:   iIdx
+        vguid: encodeURIComponent(sVguid),
+        actionId: iIdx
       });
     },
 
