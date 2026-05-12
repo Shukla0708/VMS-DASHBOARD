@@ -59,6 +59,20 @@ sap.ui.define([], function () {
       if (!sNew || sNew === "—") { return sOld || ""; }
       return sOld + "  →  " + sNew;
     },
+    
+    formatCurrency: function (fAmount, sCurrency) {
+      if (fAmount == null || sCurrency == null) { return "—"; }
+      try {
+        return new Intl.NumberFormat("en-IN", {
+          style: "currency",
+          currency: sCurrency,
+          minimumFractionDigits: 2
+        }).format(fAmount);
+      } catch (e) {
+        return fAmount + " " + sCurrency;
+      }   
+
+    },
 
   };
 });

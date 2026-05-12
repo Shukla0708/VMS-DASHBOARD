@@ -271,6 +271,8 @@ sap.ui.define([
       var oAction = oCtx.getObject();
       var iIdx = oCtx.getPath().split("/").pop();
 
+      var sCode = oAction.actionCode; // for passing the action code to action detail page
+
       var oActionModel = this.getOwnerComponent().getModel("selectedAction");
       if (!oActionModel) {
         oActionModel = new JSONModel();
@@ -280,13 +282,14 @@ sap.ui.define([
 
       var sHash = window.location.hash.replace("#", "");
       var aParts = sHash.split("/");
-      var sManifestNo = aParts[1] ? decodeURIComponent(aParts[1]) : "X";
-      var sVguid = aParts[3] ? decodeURIComponent(aParts[3]) : "X";
+      var sManifestNo = aParts[2] ? decodeURIComponent(aParts[2]) : "X";
+      var sVguid = aParts[4] ? decodeURIComponent(aParts[4]) : "X";
 
       this._oRouter.navTo("ActionDetail", {
         manifestNo: encodeURIComponent(sManifestNo),
         vguid: encodeURIComponent(sVguid),
-        actionId: iIdx
+        actionId: iIdx,
+        actionCode: encodeURIComponent(sCode)
       });
     },
 

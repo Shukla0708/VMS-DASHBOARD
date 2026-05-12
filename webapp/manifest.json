@@ -134,7 +134,7 @@
         },
         {
           "name": "ActionDetail",
-          "pattern": "manifest/{manifestNo}/vehicle/{vguid}/action/{actionId}",
+          "pattern": "manifest/{manifestNo}/vehicle/{vguid}/action/{actionId}/code/{actionCode}",
           "target": "ActionDetail"
         }
       ],
